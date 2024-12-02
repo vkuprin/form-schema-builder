@@ -1,50 +1,59 @@
-# React + TypeScript + Vite
+# Form Schema Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Getting Started
 
-Currently, two official plugins are available:
+To get started with the Form Schema Builder app, follow these steps:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **Install dependencies**: Run the following command to install the necessary dependencies:
+   ```sh
+   yarn install
+   ```
 
-## Expanding the ESLint configuration
+2. **Start the app**: Use the following command to start the development server:
+   ```sh
+   yarn dev
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+3. **Build the app**: To create a production build, run:
+   ```sh
+   yarn build
+   ```
 
-- Configure the top-level `parserOptions` property like this:
+## Testing
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+To run tests for the Form Schema Builder app, use the following commands:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+1. **Run tests**: Execute the tests using:
+   ```sh
+   yarn test
+   ```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. **View test coverage**: To view the test coverage report, run:
+   ```sh
+   yarn test:coverage
+   ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Tech Stack
+
+The Form Schema Builder app is built using the following technologies:
+
+- **React**: A JavaScript library for building user interfaces
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript
+- **Vite**: A fast build tool and development server
+- **Chakra UI**: A simple, modular, and accessible component library for React
+- **Zustand**: A small, fast, and scalable state management solution
+- **Zod**: A TypeScript-first schema declaration and validation library
+
+## Architecture
+
+The Form Schema Builder app is designed with a modular architecture, consisting of the following key components:
+
+1. **FormBuilder**: The main component responsible for building and managing the form schema. It allows users to add, edit, and remove form elements
+
+2. **FormPreview**: A component that renders a preview of the form based on the current schema. It allows users to see how the form will look and behave
+
+3. **SchemaPreview**: A component that displays the JSON representation of the form schema. It helps users understand the structure of the form
+
+4. **ImportExport**: A component that provides functionality to import and export form schemas as JSON files. It allows users to save and load form configurations
+
+5. **Validation**: The app uses Zod for schema validation. The validation logic ensures that the form schema is correctly structured and that all required fields are present
