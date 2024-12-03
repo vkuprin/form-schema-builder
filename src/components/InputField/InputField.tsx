@@ -12,7 +12,7 @@ import {
 import { useFormContext, useWatch, FieldError } from "react-hook-form";
 import type { InputType, Schema } from "@/types/schema";
 import { Switch } from "@/ui/switch.tsx";
-import { useCallback } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { useSchemaStore } from "@/store/useSchemaStore";
 import { useHistoryStore } from "@/store/useHistoryStore";
 import { validateSchema } from "@/validation/utils";
@@ -48,22 +48,94 @@ export const InputField = ({
   const inputErrors = errors.runnables?.[runnableIndex]?.inputs?.[index];
 
   const handleTypeChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const newType = e.target.value;
+    (e: ChangeEvent<HTMLSelectElement>) => {
+      const newType = e.target.value as InputType;
 
-      setValue(
-        `runnables.${runnableIndex}.inputs.${index}.type`,
-        newType as InputType,
-      );
+      setValue(`runnables.${runnableIndex}.inputs.${index}.type`, newType, {
+        shouldValidate: true,
+      });
 
-      if (newType === "slider") {
-        setValue(`runnables.${runnableIndex}.inputs.${index}.min`, 0, {
+      const currentValues = getValues();
+      const currentInput = currentValues.runnables[runnableIndex].inputs[index];
+
+      if (!currentInput.name) {
+        setValue(
+          `runnables.${runnableIndex}.inputs.${index}.name`,
+          `input-${index + 1}`,
+          { shouldValidate: true },
+        );
+      }
+
+      if (!currentInput.label) {
+        setValue(
+          `runnables.${runnableIndex}.inputs.${index}.label`,
+          `Input ${index + 1}`,
+          { shouldValidate: true },
+        );
+      }
+
+      switch (newType) {
+        case "slider": {
+          const sliderPath =
+            `runnables.${runnableIndex}.inputs.${index}` as const;
+          setValue(`${sliderPath}.min` as const, 0, { shouldValidate: true });
+          setValue(`${sliderPath}.max` as const, 100, { shouldValidate: true });
+          setValue(`${sliderPath}.step` as const, 1, { shouldValidate: true });
+          break;
+        }
+
+        case "dropdown": {
+          const dropdownPath =
+            `runnables.${runnableIndex}.inputs.${index}` as const;
+          setValue(
+            `${dropdownPath}.options` as const,
+            [
+              { label: "Option 1", value: "opt1" },
+              { label: "Option 2", value: "opt2" },
+            ],
+            { shouldValidate: true },
+          );
+          break;
+        }
+
+        case "action": {
+          const actionPath =
+            `runnables.${runnableIndex}.inputs.${index}` as const;
+          setValue(`${actionPath}.actionType` as const, `action-${index + 1}`, {
+            shouldValidate: true,
+          });
+          break;
+        }
+
+        case "output": {
+          const outputPath =
+            `runnables.${runnableIndex}.inputs.${index}` as const;
+          setValue(`${outputPath}.outputKey` as const, `output-${index + 1}`, {
+            shouldValidate: true,
+          });
+          break;
+        }
+
+        case "initialInput": {
+          const initialPath =
+            `runnables.${runnableIndex}.inputs.${index}` as const;
+          setValue(
+            `${initialPath}.initialInputKey` as const,
+            `initial-input-${index + 1}`,
+            { shouldValidate: true },
+          );
+          break;
+        }
+      }
+
+      if (currentInput.description === undefined) {
+        setValue(`runnables.${runnableIndex}.inputs.${index}.description`, "", {
           shouldValidate: true,
         });
-        setValue(`runnables.${runnableIndex}.inputs.${index}.max`, 100, {
-          shouldValidate: true,
-        });
-        setValue(`runnables.${runnableIndex}.inputs.${index}.step`, 1, {
+      }
+
+      if (currentInput.required === undefined) {
+        setValue(`runnables.${runnableIndex}.inputs.${index}.required`, false, {
           shouldValidate: true,
         });
       }
@@ -79,7 +151,7 @@ export const InputField = ({
   );
 
   const handleSwitchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       setValue(
         `runnables.${runnableIndex}.inputs.${index}.required`,
         e.target.checked,
