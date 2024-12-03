@@ -183,7 +183,7 @@ export const FormBuilder = () => {
               <FormPreview schema={schema} onSubmit={console.log} />
             ) : (
               <form onChange={handleSubmit(onSubmit)}>
-                <Stack gap={4}>
+                <Stack gap={4} bg="gray.50" borderRadius="md">
                   {fields.map((runnable, index) => (
                     <RunnableForm
                       key={runnable.id}

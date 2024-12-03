@@ -4,6 +4,8 @@ import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { ThemeProvider } from "next-themes";
 import { FormBuilder } from "@/components";
 
+console.log(defaultSystem);
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ChakraProvider value={defaultSystem}>

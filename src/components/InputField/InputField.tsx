@@ -223,7 +223,7 @@ export const InputField = ({
   return (
     <Box borderWidth="1px" borderRadius="lg" shadow="sm">
       <Box p={4}>
-        <Stack gap={4}>
+        <Stack gap={4} bg="gray.10" borderRadius="md">
           <HStack justify="space-between">
             <Text fontWeight="bold">Input #{index + 1}</Text>
             <Button onClick={handleRemove} size="sm" colorScheme="red">
