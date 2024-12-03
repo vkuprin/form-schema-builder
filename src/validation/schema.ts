@@ -32,6 +32,7 @@ export const inputSchema = baseInputSchema
     actionType: z.string().optional(),
     outputKey: z.string().optional(),
     initialInputKey: z.string().optional(),
+    order: z.number().optional(),
   })
   .refine(
     (input) => {
