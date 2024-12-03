@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormContext, useWatch, FieldError } from "react-hook-form";
 import type { Schema } from "@/types/schema";
+import { Switch } from "@/ui/switch.tsx";
 
 interface InputFieldProps {
   runnableIndex: number;
@@ -74,7 +75,12 @@ export const InputField = ({
           <Box>
             <Text mb={2}>Type</Text>
             <NativeSelectRoot>
-              <NativeSelectField>
+              <NativeSelectField
+                {...register(`runnables.${runnableIndex}.inputs.${index}.type`)}
+                defaultValue={useWatch({
+                  name: `runnables.${runnableIndex}.inputs.${index}.type`,
+                })}
+              >
                 <option value="dropdown">Dropdown</option>
                 <option value="slider">Slider</option>
                 <option value="textarea">Textarea</option>
@@ -88,11 +94,15 @@ export const InputField = ({
 
           <Box>
             <Text mb={2}>Required</Text>
-            <input
-              type="checkbox"
-              {...register(
-                `runnables.${runnableIndex}.inputs.${index}.required`,
-              )}
+            <Switch
+              inputProps={{
+                ...register(
+                  `runnables.${runnableIndex}.inputs.${index}.required`,
+                ),
+                checked: useWatch({
+                  name: `runnables.${runnableIndex}.inputs.${index}.required`,
+                }),
+              }}
             />
           </Box>
 
