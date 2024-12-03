@@ -65,7 +65,39 @@ export const runnableSchema = z.object({
   inputs: z
     .array(inputSchema)
     .min(1, "At least one input is required")
-    .max(20, "Maximum 20 inputs allowed"),
+    .max(20, "Maximum 20 inputs allowed")
+    .refine(
+      (inputs) => {
+        const names = new Set();
+        for (const input of inputs) {
+          if (names.has(input.name)) {
+            return false;
+          }
+          names.add(input.name);
+        }
+        return true;
+      },
+      {
+        message: "Input names must be unique within a runnable",
+      },
+    )
+    .refine(
+      (inputs) => {
+        const orders = inputs
+          .map((input) => input.order)
+          .filter((order) => order !== undefined);
+        orders.sort((a, b) => a - b);
+        for (let i = 0; i < orders.length; i++) {
+          if (orders[i] !== i + 1) {
+            return false;
+          }
+        }
+        return true;
+      },
+      {
+        message: "Order numbers must be sequential without gaps",
+      },
+    ),
   output: z
     .object({
       dataTitle: z.string().optional(),
