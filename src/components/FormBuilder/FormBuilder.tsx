@@ -1,4 +1,12 @@
-import { Box, Button, Container, Text, Stack, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Text,
+  Stack,
+  HStack,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { useFieldArray, useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -30,6 +38,11 @@ export const FormBuilder = () => {
     control,
     name: "runnables",
   });
+
+  const buttonSize: "sm" | "md" | "lg" | "xl" = useBreakpointValue({
+    base: "md",
+    md: "lg",
+  }) as "sm" | "md" | "lg" | "xl";
 
   const onSubmit = (data: Schema) => {
     const validation = validateSchema(data);
@@ -67,24 +80,24 @@ export const FormBuilder = () => {
   };
 
   return (
-    <Box bg="gray.50" minH="100vh">
-      <Container maxW="container.xl" py={8}>
+    <Box bg="gray.50" minH="100vh" p={4}>
+      <Container maxW="container.xl" py={6}>
         <FormProvider {...methods}>
-          <Stack gap={8}>
+          <Stack gap={6}>
             <Box pb={4} borderBottom="2px" borderColor="gray.200">
               <Text fontSize="3xl" fontWeight="bold" color="blue.600">
                 Form Schema Builder
               </Text>
             </Box>
 
-            <HStack justify="space-between">
-              <Stack direction="row" gap={4}>
+            <HStack justify="space-between" flexWrap="wrap" gap={4}>
+              <Stack direction="row" gap={4} flexWrap="wrap">
                 <Button
                   onClick={handleAddRunnable}
                   bg="blue.500"
                   color="white"
                   disabled={isPreviewMode || fields.length >= 20}
-                  size="lg"
+                  size={buttonSize}
                   _hover={{ bg: "blue.600" }}
                 >
                   Add Runnable
@@ -93,7 +106,7 @@ export const FormBuilder = () => {
                   onClick={() => setIsPreviewMode(!isPreviewMode)}
                   bg={isPreviewMode ? "green.500" : "gray.500"}
                   color="white"
-                  size="lg"
+                  size={buttonSize}
                   _hover={{ bg: isPreviewMode ? "green.600" : "gray.600" }}
                 >
                   {isPreviewMode ? "Edit Mode" : "Preview Mode"}
@@ -102,15 +115,13 @@ export const FormBuilder = () => {
                   onClick={handleReset}
                   bg="red.500"
                   color="white"
-                  size="lg"
+                  size={buttonSize}
                   _hover={{ bg: "red.600" }}
                 >
                   Reset Schema
                 </Button>
               </Stack>
-              <Stack direction="row" gap={4}>
-                <ImportExport schema={schema} onImport={handleImport} />
-              </Stack>
+              <ImportExport schema={schema} onImport={handleImport} />
             </HStack>
 
             {validationErrors.length > 0 && (
@@ -127,7 +138,7 @@ export const FormBuilder = () => {
               <FormPreview schema={schema} onSubmit={console.log} />
             ) : (
               <form onChange={handleSubmit(onSubmit)}>
-                <Stack gap={6}>
+                <Stack gap={4}>
                   {fields.map((runnable, index) => (
                     <RunnableForm
                       key={runnable.id}
