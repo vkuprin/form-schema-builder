@@ -12,6 +12,7 @@ import {
 import { useFormContext, useWatch, FieldError } from "react-hook-form";
 import type { Schema } from "@/types/schema";
 import { Switch } from "@/ui/switch.tsx";
+import { useCallback } from "react";
 
 interface InputFieldProps {
   runnableIndex: number;
@@ -26,13 +27,32 @@ export const InputField = ({
 }: InputFieldProps) => {
   const {
     register,
+    setValue,
     formState: { errors },
+    watch,
   } = useFormContext<Schema>();
+
   const inputType = useWatch({
     name: `runnables.${runnableIndex}.inputs.${index}.type`,
   });
 
+  const required = watch(`runnables.${runnableIndex}.inputs.${index}.required`);
+
   const inputErrors = errors.runnables?.[runnableIndex]?.inputs?.[index];
+
+  const handleSwitchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(
+        `runnables.${runnableIndex}.inputs.${index}.required`,
+        e.target.checked,
+        {
+          shouldDirty: true,
+          shouldValidate: true,
+        },
+      );
+    },
+    [runnableIndex, index, setValue],
+  );
 
   return (
     <Box borderWidth="1px" borderRadius="lg" shadow="sm">
@@ -77,9 +97,6 @@ export const InputField = ({
             <NativeSelectRoot>
               <NativeSelectField
                 {...register(`runnables.${runnableIndex}.inputs.${index}.type`)}
-                defaultValue={useWatch({
-                  name: `runnables.${runnableIndex}.inputs.${index}.type`,
-                })}
               >
                 <option value="dropdown">Dropdown</option>
                 <option value="slider">Slider</option>
@@ -96,12 +113,9 @@ export const InputField = ({
             <Text mb={2}>Required</Text>
             <Switch
               inputProps={{
-                ...register(
-                  `runnables.${runnableIndex}.inputs.${index}.required`,
-                ),
-                checked: useWatch({
-                  name: `runnables.${runnableIndex}.inputs.${index}.required`,
-                }),
+                name: `runnables.${runnableIndex}.inputs.${index}.required`,
+                onChange: handleSwitchChange,
+                checked: required || false,
               }}
             />
           </Box>
