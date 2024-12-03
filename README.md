@@ -7,11 +7,13 @@
 To get started with the Form Schema Builder app, follow these steps:
 
 1. **Install dependencies**: Run the following command to install the necessary dependencies:
+
    ```sh
    yarn install
    ```
 
 2. **Start the app**: Use the following command to start the development server:
+
    ```sh
    yarn dev
    ```
@@ -26,6 +28,7 @@ To get started with the Form Schema Builder app, follow these steps:
 To run tests for the Form Schema Builder app, use the following commands:
 
 1. **Run tests**: Execute the tests using:
+
    ```sh
    yarn test
    ```
