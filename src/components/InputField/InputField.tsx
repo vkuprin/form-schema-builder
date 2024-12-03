@@ -17,6 +17,17 @@ import { useSchemaStore } from "@/store/useSchemaStore";
 import { useHistoryStore } from "@/store/useHistoryStore";
 import { validateSchema } from "@/validation/utils";
 
+type ClearFields =
+  | "min"
+  | "max"
+  | "step"
+  | "options"
+  | "actionType"
+  | "outputKey"
+  | "initialInputKey"
+  | "description"
+  | "defaultValue";
+
 interface InputFieldProps {
   runnableIndex: number;
   index: number;
@@ -47,108 +58,127 @@ export const InputField = ({
 
   const inputErrors = errors.runnables?.[runnableIndex]?.inputs?.[index];
 
-  const handleTypeChange = useCallback(
-    (e: ChangeEvent<HTMLSelectElement>) => {
-      const newType = e.target.value as InputType;
+  const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newType = e.target.value as InputType;
 
-      setValue(`runnables.${runnableIndex}.inputs.${index}.type`, newType, {
+    setValue(`runnables.${runnableIndex}.inputs.${index}.type`, newType, {
+      shouldValidate: true,
+    });
+
+    const clearFields: ClearFields[] = [
+      "min",
+      "max",
+      "step",
+      "options",
+      "actionType",
+      "outputKey",
+      "initialInputKey",
+      "description",
+      "defaultValue",
+    ];
+
+    clearFields.forEach((field: ClearFields) => {
+      setValue(
+        `runnables.${runnableIndex}.inputs.${index}.${field}`,
+        undefined,
+        {
+          shouldValidate: true,
+        },
+      );
+    });
+
+    const currentValues = getValues();
+    const currentInput = currentValues.runnables[runnableIndex].inputs[index];
+
+    if (!currentInput.name) {
+      setValue(
+        `runnables.${runnableIndex}.inputs.${index}.name`,
+        `input-${index + 1}`,
+        { shouldValidate: true },
+      );
+    }
+
+    if (!currentInput.label) {
+      setValue(
+        `runnables.${runnableIndex}.inputs.${index}.label`,
+        `Input ${index + 1}`,
+        { shouldValidate: true },
+      );
+    }
+
+    switch (newType) {
+      case "slider": {
+        const sliderPath =
+          `runnables.${runnableIndex}.inputs.${index}` as const;
+        setValue(`${sliderPath}.min` as const, 0, { shouldValidate: true });
+        setValue(`${sliderPath}.max` as const, 100, { shouldValidate: true });
+        setValue(`${sliderPath}.step` as const, 1, { shouldValidate: true });
+        break;
+      }
+
+      case "dropdown": {
+        const dropdownPath =
+          `runnables.${runnableIndex}.inputs.${index}` as const;
+        setValue(
+          `${dropdownPath}.options` as const,
+          [
+            { label: "Option 1", value: "opt1" },
+            { label: "Option 2", value: "opt2" },
+          ],
+          { shouldValidate: true },
+        );
+        break;
+      }
+
+      case "action": {
+        const actionPath =
+          `runnables.${runnableIndex}.inputs.${index}` as const;
+        setValue(`${actionPath}.actionType` as const, `action-${index + 1}`, {
+          shouldValidate: true,
+        });
+        break;
+      }
+
+      case "output": {
+        const outputPath =
+          `runnables.${runnableIndex}.inputs.${index}` as const;
+        setValue(`${outputPath}.outputKey` as const, `output-${index + 1}`, {
+          shouldValidate: true,
+        });
+        break;
+      }
+
+      case "initialInput": {
+        const initialPath =
+          `runnables.${runnableIndex}.inputs.${index}` as const;
+        setValue(
+          `${initialPath}.initialInputKey` as const,
+          `initial-input-${index + 1}`,
+          { shouldValidate: true },
+        );
+        break;
+      }
+    }
+
+    if (currentInput.description === undefined) {
+      setValue(`runnables.${runnableIndex}.inputs.${index}.description`, "", {
         shouldValidate: true,
       });
+    }
 
-      const currentValues = getValues();
-      const currentInput = currentValues.runnables[runnableIndex].inputs[index];
+    if (currentInput.required === undefined) {
+      setValue(`runnables.${runnableIndex}.inputs.${index}.required`, false, {
+        shouldValidate: true,
+      });
+    }
 
-      if (!currentInput.name) {
-        setValue(
-          `runnables.${runnableIndex}.inputs.${index}.name`,
-          `input-${index + 1}`,
-          { shouldValidate: true },
-        );
-      }
-
-      if (!currentInput.label) {
-        setValue(
-          `runnables.${runnableIndex}.inputs.${index}.label`,
-          `Input ${index + 1}`,
-          { shouldValidate: true },
-        );
-      }
-
-      switch (newType) {
-        case "slider": {
-          const sliderPath =
-            `runnables.${runnableIndex}.inputs.${index}` as const;
-          setValue(`${sliderPath}.min` as const, 0, { shouldValidate: true });
-          setValue(`${sliderPath}.max` as const, 100, { shouldValidate: true });
-          setValue(`${sliderPath}.step` as const, 1, { shouldValidate: true });
-          break;
-        }
-
-        case "dropdown": {
-          const dropdownPath =
-            `runnables.${runnableIndex}.inputs.${index}` as const;
-          setValue(
-            `${dropdownPath}.options` as const,
-            [
-              { label: "Option 1", value: "opt1" },
-              { label: "Option 2", value: "opt2" },
-            ],
-            { shouldValidate: true },
-          );
-          break;
-        }
-
-        case "action": {
-          const actionPath =
-            `runnables.${runnableIndex}.inputs.${index}` as const;
-          setValue(`${actionPath}.actionType` as const, `action-${index + 1}`, {
-            shouldValidate: true,
-          });
-          break;
-        }
-
-        case "output": {
-          const outputPath =
-            `runnables.${runnableIndex}.inputs.${index}` as const;
-          setValue(`${outputPath}.outputKey` as const, `output-${index + 1}`, {
-            shouldValidate: true,
-          });
-          break;
-        }
-
-        case "initialInput": {
-          const initialPath =
-            `runnables.${runnableIndex}.inputs.${index}` as const;
-          setValue(
-            `${initialPath}.initialInputKey` as const,
-            `initial-input-${index + 1}`,
-            { shouldValidate: true },
-          );
-          break;
-        }
-      }
-
-      if (currentInput.description === undefined) {
-        setValue(`runnables.${runnableIndex}.inputs.${index}.description`, "", {
-          shouldValidate: true,
-        });
-      }
-
-      if (currentInput.required === undefined) {
-        setValue(`runnables.${runnableIndex}.inputs.${index}.required`, false, {
-          shouldValidate: true,
-        });
-      }
-
-      const updatedValues = getValues();
-      const validation = validateSchema(updatedValues);
-      if (validation.success) {
-        setSchema(updatedValues);
-        pushToHistory(updatedValues);
-      }
-    },
-    [runnableIndex, index, setValue, getValues, setSchema, pushToHistory],
-  );
+    const updatedValues = getValues();
+    const validation = validateSchema(updatedValues);
+    if (validation.success) {
+      setSchema(updatedValues);
+      pushToHistory(updatedValues);
+    }
+  };
 
   const handleSwitchChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
