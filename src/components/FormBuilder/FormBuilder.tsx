@@ -119,6 +119,7 @@ export const FormBuilder = () => {
                   color="white"
                   size={buttonSize}
                   _hover={{ bg: isPreviewMode ? "green.600" : "gray.600" }}
+                  disabled={!schema.runnables.length}
                 >
                   {isPreviewMode ? "Edit Mode" : "Preview Mode"}
                 </Button>
