@@ -11,11 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { useFormContext, useWatch, FieldError } from "react-hook-form";
 import type { InputType, Schema } from "@/types/schema";
-import { Switch } from "@/ui/switch.tsx";
+import { SwitchStuff } from "@/ui/switch.tsx";
 import { ChangeEvent, useCallback } from "react";
 import { useSchemaStore } from "@/store/useSchemaStore";
 import { useHistoryStore } from "@/store/useHistoryStore";
 import { validateSchema } from "@/validation/utils";
+import { RiCloseLine } from "react-icons/ri";
 
 type ClearFields =
   | "min"
@@ -226,8 +227,13 @@ export const InputField = ({
         <Stack gap={4} bg="gray.10" borderRadius="md">
           <HStack justify="space-between">
             <Text fontWeight="bold">Input #{index + 1}</Text>
-            <Button onClick={handleRemove} size="sm" colorScheme="red">
-              ×
+            <Button
+              onClick={handleRemove}
+              size="sm"
+              colorScheme="red"
+              aria-label="Remove Input"
+            >
+              <RiCloseLine />
             </Button>
           </HStack>
 
@@ -275,7 +281,7 @@ export const InputField = ({
 
           <Box>
             <Text mb={2}>Required</Text>
-            <Switch
+            <SwitchStuff
               inputProps={{
                 name: `runnables.${runnableIndex}.inputs.${index}.required`,
                 onChange: handleSwitchChange,

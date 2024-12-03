@@ -38,17 +38,6 @@ To run tests for the Form Schema Builder app, use the following commands:
    yarn test:coverage
    ```
 
-## Tech Stack
-
-The Form Schema Builder app is built using the following technologies:
-
-- **React**: A JavaScript library for building user interfaces
-- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript
-- **Vite**: A fast build tool and development server
-- **Chakra UI**: A simple, modular, and accessible component library for React
-- **Zustand**: A small, fast, and scalable state management solution
-- **Zod**: A TypeScript-first schema declaration and validation library
-
 ## Architecture
 
 The Form Schema Builder app is designed with a modular architecture, consisting of the following key components:

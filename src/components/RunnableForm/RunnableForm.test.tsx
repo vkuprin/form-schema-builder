@@ -70,7 +70,9 @@ describe("RunnableForm", () => {
       </TestWrapper>,
     );
 
-    const removeButton = screen.getByRole("button", { name: /×/ });
+    const removeButton = screen.getByRole("button", {
+      name: /Remove Runnable/,
+    });
     await user.click(removeButton);
 
     expect(removeMock).toHaveBeenCalledWith(0);

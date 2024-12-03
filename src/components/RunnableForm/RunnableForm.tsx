@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 import Sortable from "sortablejs";
 import type { Schema } from "@/types/schema.ts";
 import { InputField } from "../InputField/InputField.tsx";
+import { RiAddLine, RiCloseLine } from "react-icons/ri";
 
 interface RunnableFormProps {
   control: Control<Schema>;
@@ -51,7 +52,6 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
           document.body.style.cursor = "default";
           if (oldIndex !== undefined && newIndex !== undefined) {
             move(oldIndex, newIndex);
-            // Update form values after moving
             const values = getValues();
             setValue("runnables", values.runnables, {
               shouldDirty: true,
@@ -65,7 +65,6 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
 
   const handleRemove = (index: number) => {
     remove(index);
-    // Update form values after removal
     const values = getValues();
     setValue(
       "runnables",
@@ -84,7 +83,6 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
       type: "textarea",
       required: false,
     });
-    // Update form values after adding input
     const values = getValues();
     setValue("runnables", values.runnables, {
       shouldDirty: true,
@@ -102,8 +100,12 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
             <Text fontSize="xl" fontWeight="bold">
               Runnable #{index + 1}
             </Text>
-            <Button onClick={() => handleRemove(index)} colorScheme="red">
-              ×
+            <Button
+              onClick={() => handleRemove(index)}
+              colorScheme="red"
+              aria-label="Remove Runnable"
+            >
+              <RiCloseLine />
             </Button>
           </HStack>
 
@@ -140,6 +142,7 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
             _hover={{ bg: "blue.600" }}
             _active={{ bg: "blue.700" }}
           >
+            <RiAddLine />
             Add Input
           </Button>
 
