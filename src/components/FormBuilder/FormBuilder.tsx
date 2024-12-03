@@ -8,6 +8,12 @@ import {
   HStack,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import {
+  RiAddCircleLine,
+  RiEditLine,
+  RiEyeLine,
+  RiRefreshLine,
+} from "react-icons/ri";
 import { useFieldArray, useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSchemaStore } from "@/store/useSchemaStore";
@@ -21,6 +27,8 @@ import {
 import type { Schema } from "@/types/schema";
 import { formSchema } from "@/validation/schema";
 import { validateSchema } from "@/validation/utils";
+
+const Divider = () => <Box border="1px solid" borderColor="gray.200" />;
 
 export const FormBuilder = () => {
   const { schema, setSchema, resetSchema } = useSchemaStore();
@@ -40,9 +48,10 @@ export const FormBuilder = () => {
   });
 
   const buttonSize = useBreakpointValue({
-    base: "md",
-    md: "lg",
-  }) as "sm" | "md" | "lg" | "xl";
+    base: "sm",
+    md: "md",
+    lg: "lg",
+  }) as "sm" | "md" | "lg";
 
   const onSubmit = (data: Schema) => {
     const validation = validateSchema(data);
@@ -91,18 +100,22 @@ export const FormBuilder = () => {
   };
 
   return (
-    <Box bg="gray.50" minH="100vh" p={4}>
-      <Container maxW="container.xl" py={6}>
+    <Box bg="gray.100" minH="100vh" py={8}>
+      <Container maxW="container.xl">
         <FormProvider {...methods}>
-          <Stack gap={6}>
-            <Box pb={4} borderBottom="2px" borderColor="gray.200">
-              <Text fontSize="3xl" fontWeight="bold" color="blue.600">
+          <Stack gap={8}>
+            <Box textAlign="center">
+              <Text fontSize="4xl" fontWeight="bold" color="blue.700">
                 Form Schema Builder
               </Text>
+              <Text color="gray.600" mt={2}>
+                Build, edit, and preview your form schema effortlessly.
+              </Text>
             </Box>
+            <Divider />
 
-            <HStack justify="space-between" flexWrap="wrap" gap={4}>
-              <Stack direction="row" gap={4} flexWrap="wrap">
+            <HStack justify="space-between" wrap="wrap" gap={4}>
+              <HStack gap={4} wrap="wrap">
                 <Button
                   onClick={handleAddRunnable}
                   bg="blue.500"
@@ -111,6 +124,7 @@ export const FormBuilder = () => {
                   size={buttonSize}
                   _hover={{ bg: "blue.600" }}
                 >
+                  <RiAddCircleLine style={{ marginRight: "8px" }} />
                   Add Runnable
                 </Button>
                 <Button
@@ -118,10 +132,22 @@ export const FormBuilder = () => {
                   bg={isPreviewMode ? "green.500" : "gray.500"}
                   color="white"
                   size={buttonSize}
-                  _hover={{ bg: isPreviewMode ? "green.600" : "gray.600" }}
+                  _hover={{
+                    bg: isPreviewMode ? "green.600" : "gray.600",
+                  }}
                   disabled={!schema.runnables.length}
                 >
-                  {isPreviewMode ? "Edit Mode" : "Preview Mode"}
+                  {isPreviewMode ? (
+                    <>
+                      <RiEditLine style={{ marginRight: "8px" }} />
+                      Edit Mode
+                    </>
+                  ) : (
+                    <>
+                      <RiEyeLine style={{ marginRight: "8px" }} />
+                      Preview Mode
+                    </>
+                  )}
                 </Button>
                 <Button
                   onClick={handleReset}
@@ -130,14 +156,21 @@ export const FormBuilder = () => {
                   size={buttonSize}
                   _hover={{ bg: "red.600" }}
                 >
+                  <RiRefreshLine style={{ marginRight: "8px" }} />
                   Reset Schema
                 </Button>
-              </Stack>
+              </HStack>
               <ImportExport schema={schema} onImport={handleImport} />
             </HStack>
 
             {validationErrors.length > 0 && (
-              <Box p={4} bg="red.100" borderRadius="md">
+              <Box
+                bg="red.50"
+                border="1px solid"
+                borderColor="red.200"
+                p={4}
+                borderRadius="md"
+              >
                 {validationErrors.map((error, index) => (
                   <Text key={index} color="red.600">
                     {error}

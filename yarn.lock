@@ -3560,6 +3560,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.53.2"
+    react-icons: "npm:^5.4.0"
     sortablejs: "npm:^1.15.6"
     typescript: "npm:^5.7.2"
     typescript-eslint: "npm:^8.17.0"
@@ -4716,6 +4717,15 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
   checksum: 10/172589ac5871bd41717e8c6bc4c825d149db88eb02e356a8fef4115615a56b21bf66ad16954575b1d6302ed265b8780f1975a2730d5aa10a53e412b56d9f72ca
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.4.0":
+  version: 5.4.0
+  resolution: "react-icons@npm:5.4.0"
+  peerDependencies:
+    react: "*"
+  checksum: 10/c900d475c64852b316d16bdc1a436c93e18e0ffb321ebc43a1d8741191baba736e0ef4c6d871399056832b69413cd13b56ae6a18eaa5ad17041df805d803651c
   languageName: node
   linkType: hard
 
