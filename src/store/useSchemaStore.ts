@@ -19,6 +19,7 @@ interface SchemaStore {
     startIndex: number,
     endIndex: number,
   ) => void;
+  resetSchema: () => void;
 }
 
 export const useSchemaStore = create<SchemaStore>((set) => ({
@@ -115,4 +116,9 @@ export const useSchemaStore = create<SchemaStore>((set) => ({
         },
       };
     }),
+
+  resetSchema: () =>
+    set(() => ({
+      schema: { runnables: [] },
+    })),
 }));

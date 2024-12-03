@@ -15,7 +15,7 @@ import { formSchema } from "@/validation/schema";
 import { validateSchema } from "@/validation/utils";
 
 export const FormBuilder = () => {
-  const { schema, setSchema } = useSchemaStore();
+  const { schema, setSchema, resetSchema } = useSchemaStore();
   const { push: pushToHistory } = useHistoryStore();
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -61,6 +61,11 @@ export const FormBuilder = () => {
     }
   };
 
+  const handleReset = () => {
+    resetSchema();
+    methods.reset();
+  };
+
   return (
     <Box bg="gray.50" minH="100vh">
       <Container maxW="container.xl" py={8}>
@@ -92,6 +97,15 @@ export const FormBuilder = () => {
                   _hover={{ bg: isPreviewMode ? "green.600" : "gray.600" }}
                 >
                   {isPreviewMode ? "Edit Mode" : "Preview Mode"}
+                </Button>
+                <Button
+                  onClick={handleReset}
+                  bg="red.500"
+                  color="white"
+                  size="lg"
+                  _hover={{ bg: "red.600" }}
+                >
+                  Reset Schema
                 </Button>
               </Stack>
               <Stack direction="row" gap={4}>
