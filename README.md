@@ -1,5 +1,7 @@
 # Form Schema Builder
 
+![Node.js](https://img.shields.io/badge/node-18%2B-brightgreen)
+
 ## Getting Started
 
 To get started with the Form Schema Builder app, follow these steps:
