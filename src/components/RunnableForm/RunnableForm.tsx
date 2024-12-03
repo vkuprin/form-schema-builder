@@ -24,7 +24,10 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
   const {
     register,
     formState: { errors },
+    getValues,
+    setValue,
   } = useFormContext<Schema>();
+
   const {
     fields,
     move,
@@ -48,11 +51,46 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
           document.body.style.cursor = "default";
           if (oldIndex !== undefined && newIndex !== undefined) {
             move(oldIndex, newIndex);
+            // Update form values after moving
+            const values = getValues();
+            setValue("runnables", values.runnables, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
           }
         },
       });
     }
-  }, [move]);
+  }, [move, getValues, setValue]);
+
+  const handleRemove = (index: number) => {
+    remove(index);
+    // Update form values after removal
+    const values = getValues();
+    setValue(
+      "runnables",
+      values.runnables.filter((_, idx) => idx !== index),
+      {
+        shouldDirty: true,
+        shouldValidate: true,
+      },
+    );
+  };
+
+  const handleAppendInput = () => {
+    append({
+      name: `input-${fields.length + 1}`,
+      label: `Input ${fields.length + 1}`,
+      type: "textarea",
+      required: false,
+    });
+    // Update form values after adding input
+    const values = getValues();
+    setValue("runnables", values.runnables, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  };
 
   const runnableErrors = errors.runnables?.[index];
 
@@ -64,7 +102,7 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
             <Text fontSize="xl" fontWeight="bold">
               Runnable #{index + 1}
             </Text>
-            <Button onClick={() => remove(index)} colorScheme="red">
+            <Button onClick={() => handleRemove(index)} colorScheme="red">
               ×
             </Button>
           </HStack>
@@ -95,14 +133,7 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
           </Box>
 
           <Button
-            onClick={() =>
-              append({
-                name: `input-${fields.length + 1}`,
-                label: `Input ${fields.length + 1}`,
-                type: "textarea",
-                required: false,
-              })
-            }
+            onClick={handleAppendInput}
             bg="blue.500"
             color="white"
             w="fit-content"
@@ -133,3 +164,5 @@ export const RunnableForm = ({ control, index, remove }: RunnableFormProps) => {
     </Box>
   );
 };
+
+export default RunnableForm;

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -9,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 import { useFieldArray, useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useSchemaStore } from "@/store/useSchemaStore";
 import { useHistoryStore } from "@/store/useHistoryStore";
 import {
@@ -39,7 +39,7 @@ export const FormBuilder = () => {
     name: "runnables",
   });
 
-  const buttonSize: "sm" | "md" | "lg" | "xl" = useBreakpointValue({
+  const buttonSize = useBreakpointValue({
     base: "md",
     md: "lg",
   }) as "sm" | "md" | "lg" | "xl";
@@ -53,6 +53,17 @@ export const FormBuilder = () => {
     } else {
       setValidationErrors(validation.errors?.map((e) => e.message) || []);
     }
+  };
+
+  const handleRemoveRunnable = (index: number) => {
+    remove(index);
+    const updatedSchema = {
+      ...schema,
+      runnables: schema.runnables.filter((_, idx) => idx !== index),
+    };
+    setSchema(updatedSchema);
+    pushToHistory(updatedSchema);
+    handleSubmit(onSubmit)();
   };
 
   const handleAddRunnable = () => {
@@ -144,7 +155,7 @@ export const FormBuilder = () => {
                       key={runnable.id}
                       control={control}
                       index={index}
-                      remove={remove}
+                      remove={handleRemoveRunnable}
                     />
                   ))}
                 </Stack>
@@ -158,3 +169,5 @@ export const FormBuilder = () => {
     </Box>
   );
 };
+
+export default FormBuilder;
