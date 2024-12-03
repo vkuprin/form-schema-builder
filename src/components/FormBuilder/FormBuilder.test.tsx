@@ -7,6 +7,7 @@ vi.mock("../../store/useSchemaStore", () => ({
   useSchemaStore: vi.fn(() => ({
     schema: { runnables: [] },
     setSchema: vi.fn(),
+    resetSchema: vi.fn(),
   })),
 }));
 
@@ -30,6 +31,19 @@ describe("FormBuilder", () => {
   it("shows schema preview", () => {
     render(<FormBuilder />);
     expect(screen.getByText("Schema Preview")).toBeInTheDocument();
+
+    const previewBox = screen.getByText((content) => {
+      return content.includes('"runnables": []');
+    });
+    expect(previewBox).toBeInTheDocument();
+  });
+
+  it("resets schema when clicking reset button", async () => {
+    const user = userEvent.setup();
+    render(<FormBuilder />);
+
+    const resetButton = screen.getByRole("button", { name: /reset schema/i });
+    await user.click(resetButton);
 
     const previewBox = screen.getByText((content) => {
       return content.includes('"runnables": []');
