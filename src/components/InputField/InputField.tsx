@@ -352,6 +352,7 @@ export const InputField = ({
                 <Input
                   {...register(
                     `runnables.${runnableIndex}.inputs.${index}.min`,
+                    { valueAsNumber: true },
                   )}
                   type="number"
                 />
@@ -362,6 +363,7 @@ export const InputField = ({
                 <Input
                   {...register(
                     `runnables.${runnableIndex}.inputs.${index}.max`,
+                    { valueAsNumber: true },
                   )}
                   type="number"
                 />
@@ -372,6 +374,7 @@ export const InputField = ({
                 <Input
                   {...register(
                     `runnables.${runnableIndex}.inputs.${index}.step`,
+                    { valueAsNumber: true },
                   )}
                   type="number"
                 />
