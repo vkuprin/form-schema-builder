@@ -5,8 +5,6 @@ import { ThemeProvider } from "next-themes";
 import { FormBuilder } from "@/components";
 import "normalize.css";
 
-console.log(defaultSystem);
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ChakraProvider value={defaultSystem}>
