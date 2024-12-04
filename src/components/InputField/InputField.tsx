@@ -228,7 +228,7 @@ export const InputField = ({
   ]);
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" shadow="sm">
+    <Box borderWidth="1px" borderRadius="lg" shadow="sm" cursor="move">
       <Box p={4}>
         <Stack gap={4} bg="gray.10" borderRadius="md">
           <HStack justify="space-between">
