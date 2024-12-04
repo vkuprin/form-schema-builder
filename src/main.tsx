@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { ThemeProvider } from "next-themes";
 import { FormBuilder } from "@/components";
+import "normalize.css";
 
 console.log(defaultSystem);
 
