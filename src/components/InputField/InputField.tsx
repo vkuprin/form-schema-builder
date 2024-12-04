@@ -18,6 +18,11 @@ import { useHistoryStore } from "@/store/useHistoryStore";
 import { validateSchema } from "@/validation/utils";
 import { RiCloseLine } from "react-icons/ri";
 
+type Option = {
+  label: string;
+  value: string;
+};
+
 type ClearFields =
   | "min"
   | "max"
@@ -56,6 +61,7 @@ export const InputField = ({
   });
 
   const required = watch(`runnables.${runnableIndex}.inputs.${index}.required`);
+  const options = watch(`runnables.${runnableIndex}.inputs.${index}.options`);
 
   const inputErrors = errors.runnables?.[runnableIndex]?.inputs?.[index];
 
@@ -303,10 +309,38 @@ export const InputField = ({
             <Box>
               <Text mb={2}>Options</Text>
               <Textarea
+                minH="200px"
                 {...register(
                   `runnables.${runnableIndex}.inputs.${index}.options`,
+                  {
+                    setValueAs: (value: string | Option[]): Option[] => {
+                      if (typeof value === "string") {
+                        try {
+                          const parsed = JSON.parse(value);
+                          if (
+                            Array.isArray(parsed) &&
+                            parsed.every(
+                              (item) =>
+                                typeof item === "object" &&
+                                "label" in item &&
+                                "value" in item &&
+                                typeof item.label === "string" &&
+                                typeof item.value === "string",
+                            )
+                          ) {
+                            return parsed;
+                          }
+                        } catch {
+                          console.error("Invalid JSON");
+                        }
+                        return [];
+                      }
+                      return value;
+                    },
+                  },
                 )}
-                placeholder="Enter options as JSON array: [{'label': 'Option 1', 'value': 'opt1'}]"
+                value={options ? JSON.stringify(options, null, 2) : ""}
+                placeholder='[{"label": "Option 1", "value": "opt1"}, {"label": "Option 2", "value": "opt2"}]'
               />
             </Box>
           )}
