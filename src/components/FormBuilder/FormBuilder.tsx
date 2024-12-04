@@ -100,15 +100,22 @@ export const FormBuilder = () => {
   };
 
   return (
-    <Box bg="gray.100" minH="100vh" py={8}>
-      <Container maxW="container.xl">
+    <Container maxW="1200px" p={8}>
+      <Box
+        borderRadius="xl"
+        p={8}
+        bg="rgba(0, 0, 0, 0.7)"
+        backdropFilter="blur(10px)"
+        boxShadow="0 8px 32px 0 rgba(31, 38, 135, 0.37)"
+        border="1px solid rgba(255, 255, 255, 0.18)"
+      >
         <FormProvider {...methods}>
           <Stack gap={8}>
             <Box textAlign="center">
-              <Text fontSize="4xl" fontWeight="bold" color="blue.700">
+              <Text fontSize="4xl" fontWeight="bold" color="white">
                 Form Schema Builder
               </Text>
-              <Text color="gray.600" mt={2}>
+              <Text color="whitesmoke" mt={2}>
                 Build, edit, and preview your form schema effortlessly.
               </Text>
             </Box>
@@ -199,8 +206,8 @@ export const FormBuilder = () => {
             {!isPreviewMode && <SchemaPreview schema={schema} />}
           </Stack>
         </FormProvider>
-      </Container>
-    </Box>
+      </Box>
+    </Container>
   );
 };
 
